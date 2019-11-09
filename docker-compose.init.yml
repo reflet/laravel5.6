@@ -1,0 +1,11 @@
+#
+# create project.
+# ex) $ docker-compose -f docker-compose.init.yml run --rm composer create-project "laravel/laravel=5.5.*" .
+#
+version: '2'
+services:
+  composer:
+    image: composer:1.8
+    container_name: 'composer'
+    volumes:
+      - ./src:/app
