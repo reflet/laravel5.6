@@ -31,6 +31,18 @@ services:
     depends_on:
       - mysql
 
+  cron:
+    image: my-laravel5.6/cron:7.3
+    build:
+      context: ./
+      dockerfile: ./docker/cron/Dockerfile
+    tty: true
+    volumes:
+      - ./src:/var/www/www.example.com:cached
+      - vendor:/var/www/www.example.com/vendor/
+      - node_modules:/var/www/www.example.com/node_modules/
+    depends_on:
+      - mysql
 
   node:
     image: my-laravel5.6/node:12
