@@ -13,7 +13,7 @@ ENV TZ JST-9
 ENV TERM xterm
 
 # my.conf
-COPY mysql.cnf /etc/mysql/conf.d/custom.cnf
+COPY ./docker/mysql/mysql.cnf /etc/mysql/conf.d/custom.cnf
 
 # user setting
 WORKDIR $WORKSPACE
