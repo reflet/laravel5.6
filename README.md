@@ -48,10 +48,30 @@ $ docker-compose stop
 $ docker-compose down -v
 ```
 
-## Laravelについて
-DB構成が変わった時には、migrationを実行する。
+## artisanコマンド
+Laravelのartisanコマンドの例です。
 ```bash
+# model
+$ docker-compose exec php php artisan make:model Entities/<クラス名>
+
+# console
+$ docker-compose exec php php artisan make:command <クラス名>
+
+# migration
+$ docker-compose exec php php artisan make:migration <ファイル名>
 $ docker-compose exec php php artisan migrate
+$ docker-compose exec php php artisan migrate:rollback --step=1
+
+# seeder
+$ docker-compose exec php php artisan make:seeder <クラス名>
+$ docker-compose exec php php artisan db:seed # ( DatabaseSeeder.phpに記載すべて )
+$ docker-compose exec php php artisan db:seed --class=<クラス名>
+
+# factory
+$ docker-compose exec php php artisan make:factory <クラス名>
+
+# mail
+$ docker-compose exec php php artisan make:mail <クラス名> --markdown=emails.<ファイル名>
 ```
 
 テストを作成する。
@@ -64,20 +84,42 @@ $ docker-compose exec php php artisan make:test TopTest
 $ docker-compose exec php vendor/bin/phpunit tests/Feature/TopTest.php
 ```
 
-## composer update
+## composerコマンド
 composer.jsonを変更したら下記コマンドを実行する。
 ```bash
-$ docker-compose run --rm composer update
+# default
+$ docker-compose exec php composer install
+$ docker-compose exec php composer update
+$ docker-compose exec php composer require <package>[:<tag>]
+$ docker-compose exec php composer remove <package>
+$ docker-compose exec php composer dump-autoload
+
+# modules
+$ docker-compose exec php composer install -d /var/www/www.example.com/Modules/Admin
+$ docker-compose exec php composer update -d /var/www/www.example.com/Modules/Admin
+$ docker-compose exec php composer require <package>[:<tag>] -d /var/www/www.example.com/Modules/Admin
+$ docker-compose exec php composer remove <package> -d /var/www/www.example.com/Modules/Admin
+$ docker-compose exec php composer dump-autoload -d /var/www/www.example.com/Modules/Admin
 ```
 
 ## yarnコマンド
-package.jsonを変更したら下記コマンドを実行する。
+package.json関係で操作する場合のコマンドは以下となります。
 ```bash
+# default
+$ docker-compose exec node yarn
 $ docker-compose exec node yarn dev
-```
-または、package.jsonの変更を監視して自動コンパイルしてほしい場合はこちら。
-```bash
 $ docker-compose exec node yarn watch
+$ docker-compose exec node yarn watch-poll
+$ docker-compose exec node yarn add <package>
+$ docker-compose exec node yarn remove <package>
+
+# modules
+$ docker-compose exec -w /app/Modules/Admin node yarn
+$ docker-compose exec -w /app/Modules/Admin node yarn dev
+$ docker-compose exec -w /app/Modules/Admin node yarn watch
+$ docker-compose exec -w /app/Modules/Admin node yarn watch-poll
+$ docker-compose exec -w /app/Modules/Admin node yarn add <package>
+$ docker-compose exec -w /app/Modules/Admin node yarn remove <package>
 ```
 
 ## メール送信について
