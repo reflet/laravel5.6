@@ -15,13 +15,6 @@ $ mkdir -p ~/workspace/laravel5.6/ && cd ~/workspace/laravel5.6/
 $ git clone https://github.com/reflet/laravel5.6.git .
 ```
 
-## Laravel5.6のインストール
-下記のようにsrcフォルダを削除して、create-projectコマンドを実行し、Laravelプロジェクトを作成します。
-```bash
-$ rm -rf ./src
-$ docker-compose -f docker-compose.init.yml run --rm composer create-project "laravel/laravel=5.6.*" .
-```
-
 ## dockerイメージの作成
 下記コマンドにてdockerのイメージを作成します。
 ```bash
@@ -40,9 +33,10 @@ $ docker-compose run --rm php php artisan key:generate
 ```bash
 $ docker-compose up -d
 ```
-※ hosts設定で「192.168.99.100 www.example.com」を追加する  
-※ ブラウザで「http://www.exeample.com」にアクセスしてみる  
-
+ブラウザで「http://localhost」にアクセスしてみる。
+```bash
+$ open http://localhost
+```
 ## 各サーバ停止
 ```bash
 $ docker-compose stop
@@ -76,16 +70,37 @@ composer.jsonを変更したら下記コマンドを実行する。
 $ docker-compose run --rm composer update
 ```
 
-## yarn install
+## yarnコマンド
 package.jsonを変更したら下記コマンドを実行する。
 ```bash
-$ docker-compose run --rm node bash -c "yarn install && yarn production"
+$ docker-compose exec node yarn dev
+```
+または、package.jsonの変更を監視して自動コンパイルしてほしい場合はこちら。
+```bash
+$ docker-compose exec node yarn watch
 ```
 
 ## メール送信について
 mailhogを利用しており、下記URLにて送信したメールを確認できます。
 ```
-http://www.example.com:8025/
+$ open http://localhost:8025
+```
+
+## AWS S3仮想環境(minio)
+minioを利用しており、下記URLにて送信したメールを確認できます。
+```
+// 管理画面
+$ open http://localhost:9090
+
+// 画像
+$ open http://localhost:9090/static/minio.png
+```
+
+## Laravel5.6の再インストール
+下記のようにsrcフォルダを削除して、create-projectコマンドを実行し、Laravelプロジェクトを再作成します。
+```bash
+$ rm -rf ./src
+$ docker-compose -f docker-compose.init.yml run --rm composer create-project "laravel/laravel=5.6.*" .
 ```
 
 ## IDEなどで開発する場合
