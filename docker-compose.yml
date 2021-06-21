@@ -25,9 +25,18 @@ services:
     ports:
       - '9000:9000'
     volumes:
-      - ./src:/var/www/www.example.com:cached
-      - vendor:/var/www/www.example.com/vendor/
-      - node_modules:/var/www/www.example.com/node_modules/
+      - ./src/app:/var/www/www.example.com/app:cached
+      - ./src/bootstrap:/var/www/www.example.com/bootstrap:cached
+      - ./src/config:/var/www/www.example.com/config:cached
+      - ./src/database:/var/www/www.example.com/database:cached
+      - ./src/resources:/var/www/www.example.com/resources:cached
+      - ./src/routes:/var/www/www.example.com/routes:cached
+      - ./src/storage:/var/www/www.example.com/storage:cached
+      - ./src/.env:/var/www/www.example.com/.env:cached
+      - ./src/artisan:/var/www/www.example.com/artisan:cached
+      - ./src/composer.json:/var/www/www.example.com/composer.json:cached
+      - ./src/composer.lock:/var/www/www.example.com/composer.lock:cached
+      - vendor:/var/www/www.example.com/vendor
     depends_on:
       - mysql
 
@@ -38,11 +47,20 @@ services:
       dockerfile: ./docker/cron/Dockerfile
     tty: true
     volumes:
-      - ./src:/var/www/www.example.com:cached
-      - vendor:/var/www/www.example.com/vendor/
-      - node_modules:/var/www/www.example.com/node_modules/
+      - ./src/app:/var/www/www.example.com/app:cached
+      - ./src/bootstrap:/var/www/www.example.com/bootstrap:cached
+      - ./src/config:/var/www/www.example.com/config:cached
+      - ./src/database:/var/www/www.example.com/database:cached
+      - ./src/resources:/var/www/www.example.com/resources:cached
+      - ./src/routes:/var/www/www.example.com/routes:cached
+      - ./src/storage:/var/www/www.example.com/storage:cached
+      - ./src/.env:/var/www/www.example.com/.env:cached
+      - ./src/artisan:/var/www/www.example.com/artisan:cached
+      - ./src/composer.json:/var/www/www.example.com/composer.json:cached
+      - ./src/composer.lock:/var/www/www.example.com/composer.lock:cached
+      - vendor:/var/www/www.example.com/vendor
     depends_on:
-      - mysql
+      - php
 
   node:
     image: my-laravel5.6/node:12
