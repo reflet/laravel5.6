@@ -1,0 +1,86 @@
+# -----------------------------------------------------
+# Frontend
+FROM node:12 as frontend
+RUN mkdir -p /app/{public,Modules/Admin}
+
+# yarn (web)
+COPY ./src/package.json ./src/webpack.mix.js ./src/yarn.lock /app/
+COPY ./src/resources/assets/ /app/resources/assets/
+WORKDIR /app
+RUN yarn install && yarn production
+
+# yarn (admin)
+# COPY ./src/Modules/Admin/package.json ./src/Modules/Admin/webpack.mix.js ./src/Modules/Admin/yarn.lock /app/Modules/Admin/
+# COPY ./src/Modules/Admin/resources/assets/ /app/Modules/Admin/resources/assets/
+# WORKDIR /app/Modules/Admin
+# RUN yarn install && yarn production
+
+# -----------------------------------------------------
+# Application
+FROM php:7.3-fpm
+
+ARG USER="www-data"
+ARG UID="1000"
+ARG GROUP="www-data"
+ARG GID="1000"
+
+# timezone (Asia/Tokyo)
+ENV TZ JST-9
+ENV TERM xterm
+
+# tools
+RUN apt-get -y update \
+    && apt-get install -y vim less zip unzip \
+       libpq-dev \
+       libfreetype6-dev \
+       libpng-dev \
+       libzip-dev
+
+# php options (zip)
+RUN docker-php-ext-install zip
+
+# php options (gd)
+RUN docker-php-ext-install gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-exit-install -j$(nproc) gd exif
+
+# php options (mysql)
+RUN docker-php-ext-install mysqli pdo_mysql
+
+# php.ini
+COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
+
+# application directory
+ARG APP_DIR="/var/www/www.example.com"
+RUN mkdir -p $APP_DIR
+
+# user setting
+RUN usermod -u $UID $USER && groupmod -g $GID $GROUP
+RUN chown -R $UID:$GID $APP_DIR
+
+# copy composer command.
+COPY --chown=www-data:www-data --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN composer config -g repos.packagist composer https://packagist.jp
+
+# copy codes.
+WORKDIR $APP_DIR
+COPY --chown=www-data:www-data ./src ./
+COPY --chown=www-data:www-data --from=vendor /app/vendor/ ./vendor/
+COPY --chown=www-data:www-data --from=frontend /app/node_modules/ ./node_modules/
+COPY --chown=www-data:www-data --from=frontend /app/public/js/ ./public/js/
+COPY --chown=www-data:www-data --from=frontend /app/public/css/ ./public/css/
+COPY --chown=www-data:www-data --from=frontend /app/mix-manifest.json ./mix-manifest.json
+
+# change user ( root -> www-data )
+USER $USER
+
+# composer install
+RUN composer install \
+    -d $APP_DIR \
+    --ignore-platform-reqs \
+    --no-interaction \
+    --no-plugins \
+    --no-scripts \
+    --prefer-dist
+
+# set environment file.
+RUN cp .env.example .env && php artisan key:generate

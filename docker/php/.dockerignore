@@ -1,0 +1,7 @@
+.DS_Store
+src/vendor
+src/node_modules
+src/.env
+src/app/storage/app
+src/app/storage/framework
+src/app/storage/logs

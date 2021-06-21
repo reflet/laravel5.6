@@ -18,11 +18,10 @@ services:
       - app:/var/www/www.example.com:cached
 
   php:
+    image: my-laravel5.6/php:7.3
     build:
       context: ./
       dockerfile: ./docker/php/Dockerfile
-    image: my/php7.2
-    container_name: 'php'
     tty: true
     ports:
       - '9000:9000'
@@ -33,15 +32,6 @@ services:
     depends_on:
       - mysql
 
-  composer:
-    image: composer:1.8
-    container_name: 'composer'
-    working_dir: /var/www/www.example.com/
-    volumes:
-      - app:/var/www/www.example.com:cached
-      - vendor:/var/www/www.example.com/vendor/
-    depends_on:
-      - php
 
   node:
     image: node:11.11
