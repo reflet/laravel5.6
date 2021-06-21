@@ -112,12 +112,12 @@ IDEなどで開発する際に不都合がある場合は、下記コマンド�
 - vendorフォルダ (サーバ起動中に実行)
 ```bash
 $ rm -rf ./src/vendor
-$ docker cp php:/var/www/www.example.com/vendor ./src/
+$ docker cp laravel56_php_1:/var/www/www.example.com/vendor ./src/
 ```
 - node_modulesフォルダ (サーバ起動中に実行)
 ```bash
 $ rm -rf ./src/node_modules
-$ docker cp php:/var/www/www.example.com/node_modules ./src/
+$ docker cp laravel56_node_1:/app/node_modules ./src/
 ```
 
 以上
