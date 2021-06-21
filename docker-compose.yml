@@ -33,21 +33,21 @@ services:
       - mysql
 
 
-  node:
-    image: node:11.11
-    container_name: 'node'
-    working_dir: /var/www/www.example.com/
-    volumes:
-      - app:/var/www/www.example.com:cached
-      - node_modules:/var/www/www.example.com/node_modules/
-    depends_on:
-      - php
-
   mailhog:
     image: mailhog/mailhog
     container_name: 'mailhog'
     ports:
       - "8025:8025"
+  node:
+    image: my-laravel5.6/node:12
+    build:
+      context: ./
+      dockerfile: ./docker/node/Dockerfile
+    working_dir: /app/
+    tty: true
+    volumes:
+      - app:/app:cached
+      - node_modules:/app/node_modules/
 
   mysql:
     build: ./docker/mysql/
