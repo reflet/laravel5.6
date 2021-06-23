@@ -2,9 +2,11 @@
 
 namespace App\Console\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TestEMail;
+use Illuminate\Support\Facades\Log;
 
 class EmailSendCommand extends Command
 {
@@ -39,8 +41,18 @@ class EmailSendCommand extends Command
      */
     public function handle()
     {
+        $this->info(sprintf(
+            '[%s] email:test command start.',
+            Carbon::now()->format('Y-m-d H:i:s')
+        ));
+
         $message = 'バッチ実行だよ。';
         Mail::to('hoge@example.com')
             ->send(new TestEmail($message));
+
+        $this->info(sprintf(
+            '[%s] email:test command complete.',
+            Carbon::now()->format('Y-m-d H:i:s')
+        ));
     }
 }

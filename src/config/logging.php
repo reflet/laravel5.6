@@ -35,32 +35,34 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['daily'],
         ],
 
-        'single' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/laravel.log'),
-            'level' => 'debug',
-        ],
+        // 'single' => [
+        //     'driver'     => 'single',
+        //     'path'       => storage_path('logs/laravel.log'),
+        //     'level'      => 'debug',
+        //     'permission' => 0666,
+        // ],
 
         'daily' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/laravel.log'),
-            'level' => 'debug',
-            'days' => 7,
+            'driver'     => 'daily',
+            'path'       => storage_path('logs/laravel.log'),
+            'level'      => 'debug',
+            'permission' => 0666,
+            'days'       => 7,
         ],
 
-        'slack' => [
-            'driver' => 'slack',
-            'url' => env('LOG_SLACK_WEBHOOK_URL'),
-            'username' => 'Laravel Log',
-            'emoji' => ':boom:',
-            'level' => 'critical',
-        ],
+        // 'slack' => [
+        //     'driver' => 'slack',
+        //     'url' => env('LOG_SLACK_WEBHOOK_URL'),
+        //     'username' => 'Laravel Log',
+        //     'emoji' => ':boom:',
+        //     'level' => 'critical',
+        // ],
 
         'stderr' => [
-            'driver' => 'monolog',
+            'driver'  => 'monolog',
             'handler' => StreamHandler::class,
             'with' => [
                 'stream' => 'php://stderr',
@@ -69,12 +71,20 @@ return [
 
         'syslog' => [
             'driver' => 'syslog',
-            'level' => 'debug',
+            'level'  => 'debug',
         ],
 
         'errorlog' => [
             'driver' => 'errorlog',
-            'level' => 'debug',
+            'level'  => 'debug',
+        ],
+
+        'schedule' => [
+            'driver'     => 'daily',
+            'path'       => storage_path('logs/schedule.log'),
+            'level'      => 'info',
+            'permission' => 0666,
+            'days'       => 7,
         ],
     ],
 

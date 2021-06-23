@@ -12,7 +12,7 @@ class TestEMail extends Mailable
     use Queueable, SerializesModels;
 
     /**
-     * 注文インスタンス
+     * メッセージ本文
      *
      * @var string
      */
