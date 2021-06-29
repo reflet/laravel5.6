@@ -44,6 +44,16 @@ services:
     depends_on:
       - php
 
+  supervisor:
+    image: my-laravel5.6/supervisor:7.3
+    build:
+      context: ./
+      dockerfile: ./docker/supervisor/Dockerfile
+    volumes:
+      - ./src:/var/www/www.example.com:cached
+    depends_on:
+      - php
+
   node:
     image: my-laravel5.6/node:12
     build:
