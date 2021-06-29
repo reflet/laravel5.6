@@ -30,6 +30,7 @@ RUN docker-php-ext-install mysqli pdo_mysql
 
 # php.ini
 COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
+COPY ./docker/php/www.conf /usr/local/etc/php-fpm.d/www.conf
 
 # application directory
 ARG APP_DIR="/var/www/www.example.com"
