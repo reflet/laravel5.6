@@ -86,6 +86,14 @@ return [
             'permission' => 0666,
             'days'       => 7,
         ],
+
+        'job' => [
+            'driver'     => 'daily',
+            'path'       => storage_path('logs/job.log'),
+            'level'      => 'info',
+            'permission' => 0666,
+            'days'       => 7,
+        ],
     ],
 
 ];
