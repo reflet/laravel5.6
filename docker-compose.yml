@@ -25,18 +25,9 @@ services:
     ports:
       - '9000:9000'
     volumes:
-      - ./src/app:/var/www/www.example.com/app:cached
-      - ./src/bootstrap:/var/www/www.example.com/bootstrap:cached
-      - ./src/config:/var/www/www.example.com/config:cached
-      - ./src/database:/var/www/www.example.com/database:cached
-      - ./src/resources:/var/www/www.example.com/resources:cached
-      - ./src/routes:/var/www/www.example.com/routes:cached
-      - ./src/storage:/var/www/www.example.com/storage:cached
-      - ./src/.env:/var/www/www.example.com/.env:cached
-      - ./src/artisan:/var/www/www.example.com/artisan:cached
-      - ./src/composer.json:/var/www/www.example.com/composer.json:cached
-      - ./src/composer.lock:/var/www/www.example.com/composer.lock:cached
+      - src:/var/www/www.example.com:cached
       - vendor:/var/www/www.example.com/vendor
+      - node_modules:/var/www/www.example.com/node_modules
     depends_on:
       - mysql
 
@@ -47,18 +38,9 @@ services:
       dockerfile: ./docker/cron/Dockerfile
     tty: true
     volumes:
-      - ./src/app:/var/www/www.example.com/app:cached
-      - ./src/bootstrap:/var/www/www.example.com/bootstrap:cached
-      - ./src/config:/var/www/www.example.com/config:cached
-      - ./src/database:/var/www/www.example.com/database:cached
-      - ./src/resources:/var/www/www.example.com/resources:cached
-      - ./src/routes:/var/www/www.example.com/routes:cached
-      - ./src/storage:/var/www/www.example.com/storage:cached
-      - ./src/.env:/var/www/www.example.com/.env:cached
-      - ./src/artisan:/var/www/www.example.com/artisan:cached
-      - ./src/composer.json:/var/www/www.example.com/composer.json:cached
-      - ./src/composer.lock:/var/www/www.example.com/composer.lock:cached
+      - src:/var/www/www.example.com:cached
       - vendor:/var/www/www.example.com/vendor
+      - node_modules:/var/www/www.example.com/node_modules
     depends_on:
       - php
 
@@ -70,7 +52,7 @@ services:
     working_dir: /app/
     tty: true
     volumes:
-      - ./src:/app:cached
+      - src:/app:cached
       - node_modules:/app/node_modules/
 
   mysql:
@@ -112,10 +94,10 @@ services:
 
 volumes:
   vendor:
-    driver: local
-
-  node_modules:
-    driver: local
-
   mysql-data:
-    driver: local
+  node_modules:
+  src:
+    driver_opts:
+      type: none
+      device: ${PWD}/src
+      o: bind
